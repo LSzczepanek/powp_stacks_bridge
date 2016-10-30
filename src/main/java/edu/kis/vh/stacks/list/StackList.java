@@ -1,40 +1,52 @@
 package edu.kis.vh.stacks.list;
 
-public class StackList {
+import edu.kis.vh.stacks.BasicStackImpl;
 
-	final int EMPTY_STACK_VALUE = -1;
-	Node last;
+public class StackList implements BasicStackImpl {
 
-	public void pushElement(int element) {
-		if (last == null)
-			last = new Node(element);
-		else {
-			last.next = new Node(element);
-			last.next.prev = last;
-			last = last.next;
-		}
-	}
+    private Node last;
 
-	public boolean empty() {
-		return last == null;
-	}
+    @Override
+    public void push(int value) {
+        if (last == null)
+            last = new Node(value);
+        else {
+            last.next = new Node(value);
+            last.next.prev = last;
+            last = last.next;
+        }
+    }
 
-	public boolean full() {
-		return false;
-	}
+    @Override
+    public boolean isEmpty() {
+        return last == null;
+    }
 
-	public int peek() {
-		if (empty())
-			return EMPTY_STACK_VALUE;
-		return last.value;
-	}
+    @Override
+    public boolean isFull() {
+        Node prevous = last;
+        for(int i = 0; i < BasicStackImpl.STACK_CAPACITY+1; i++) {
+            if(prevous == null)
+                return true;
+            prevous = prevous.prev;
+        }
+        return false;
+    }
 
-	public int pop() {
-		if (empty())
-			return EMPTY_STACK_VALUE;
-		int ret = last.value;
-		last = last.prev;
-		return ret;
-	}
+    @Override
+    public int top() {
+        if (isEmpty())
+            return EMPTY_STACK_VALUE;
+        return last.value;
+    }
+
+    @Override
+    public int pop() {
+        if (isEmpty())
+            return EMPTY_STACK_VALUE;
+        int ret = last.value;
+        last = last.prev;
+        return ret;
+    }
 
 }

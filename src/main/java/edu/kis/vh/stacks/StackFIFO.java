@@ -1,21 +1,28 @@
 package edu.kis.vh.stacks;
 
+import edu.kis.vh.stacks.factory.IstacksFactory;
+
 public class StackFIFO extends Stack {
 
-	private Stack temp = new Stack();
+    private final Stack temp;
 
-	@Override
-	public int pop() {
-		while (!isEmpty()) {
-			temp.push(super.pop());
-		}
+    public StackFIFO(IstacksFactory factory) {
+        super(factory.getStackImpl());
+        temp = new Stack(factory.getStackImpl());
+    }
 
-		int ret = temp.pop();
+    @Override
+    public int pop() {
+        while (!isEmpty()) {
+            temp.push(super.pop());
+        }
 
-		while (!temp.isEmpty()) {
-			push(temp.pop());
-		}
+        int ret = temp.pop();
 
-		return ret;
-	}
+        while (!temp.isEmpty()) {
+            push(temp.pop());
+        }
+
+        return ret;
+    }
 }

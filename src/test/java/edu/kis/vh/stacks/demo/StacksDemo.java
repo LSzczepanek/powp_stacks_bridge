@@ -1,34 +1,57 @@
 package edu.kis.vh.stacks.demo;
 
-import edu.kis.vh.stacks.StackHanoi;
+import java.util.Random;
+
 import edu.kis.vh.stacks.Stack;
-import edu.kis.vh.stacks.factory.DefaultStacksFactory;
+import edu.kis.vh.stacks.StackHanoi;
+import edu.kis.vh.stacks.factory.IstacksFactory;
+import edu.kis.vh.stacks.factory.StackListFactory;
 
 class StacksDemo {
 
-	public static void main(String[] args) {
-		DefaultStacksFactory factory = new DefaultStacksFactory();
-		final int NUMBER_OF_ELEMENTS_ON_STACK = 15;
+    final static int NUMBER_OF_ELEMENTS = 15;
+    final static int HANOI = 3;
 
-		Stack[] stacks = { factory.getStandardStack(), factory.getFalseStack(), factory.getFIFOStack(),
-				factory.getHanoiStack() };
+    public static void main(String[] args) {
+        Stack[] stacks = testStacks(new StackListFactory());
 
-		for (int i = 1; i < NUMBER_OF_ELEMENTS_ON_STACK; i++)
-			for (int j = 0; j < 3; j++)
-				stacks[j].push(i);
+        fillStacks(stacks);
+        fillStackWithRandomInts(stacks[HANOI], 20);
 
-		java.util.Random rn = new java.util.Random(); // Zle
-		for (int i = 1; i < NUMBER_OF_ELEMENTS_ON_STACK; i++)// Zle
-			stacks[3].push(rn.nextInt(20));// Zle
+        showStacks(stacks);
 
-		for (int i = 0; i < stacks.length; i++) {// Zle
-			while (!stacks[i].isEmpty())// Zle
-				System.out.print(stacks[i].pop() + "  ");// Zle
-			System.out.println();// Zle
-		}
+        System.out.println("total rejected is "
+                + ((StackHanoi) stacks[HANOI]).reportRejected());
+    }
 
-		System.out.println("total rejected is " + ((StackHanoi) stacks[3]).reportRejected());
+    private static void showStacks(Stack[] stacks) {
+        for (int i = 0; i < stacks.length; i++) {
+            while (!stacks[i].isEmpty()) {
+                System.out.print(stacks[i].pop() + "  ");
+            }
+            System.out.println();
+        }
+    }
 
-	}
+    private static void fillStackWithRandomInts(Stack stack, int range) {
+        Random rn = new  Random();
+        for (int i = 1; i < NUMBER_OF_ELEMENTS; i++)
+            stack.push(rn.nextInt(range));
+    }
+
+    private static void fillStacks(Stack[] stacks) {
+        for (int i = 1; i < NUMBER_OF_ELEMENTS; i++)
+            for (int j = 0; j < stacks.length; j++)
+                stacks[j].push(i);
+    }
+
+    private static Stack[] testStacks(IstacksFactory factory) {
+        return new Stack[]{
+                factory.getStandardStack(),
+                factory.getFalseStack(),
+                factory.getFIFOStack(),
+                factory.getHanoiStack()
+        };
+    }
 
 }
